@@ -3,562 +3,757 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>历史小论文自助生成器 | 上海初中历史题型</title>
+    <title>白马咖啡店 · 前世今生 | 咖啡史诗史料库</title>
     <style>
         * {
+            margin: 0;
+            padding: 0;
             box-sizing: border-box;
+            font-family: system-ui, 'Segoe UI', 'Georgia', 'Times New Roman', 'Microsoft YaHei', serif;
+        }
+
+        html {
+            overflow-y: scroll;
+            scrollbar-width: thin;
+            scrollbar-color: #aa7c4a #f7ede0;
+        }
+        html::-webkit-scrollbar {
+            width: 8px;
+        }
+        html::-webkit-scrollbar-track {
+            background: #f7ede0;
+            border-radius: 12px;
+        }
+        html::-webkit-scrollbar-thumb {
+            background-color: #aa7c4a;
+            border-radius: 12px;
         }
 
         body {
-            background: #f0f2f5;
-            font-family: 'Segoe UI', Roboto, 'Noto Sans', system-ui, -apple-system, sans-serif;
-            margin: 0;
-            padding: 24px 16px;
-            color: #1e293b;
+            background: #fdf8f0 url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" opacity="0.08"><path fill="%236b3f1c" d="M70,30 L90,10 L110,30 L130,20 L125,45 L145,55 L130,70 L140,90 L115,85 L100,105 L80,85 L55,90 L65,70 L50,55 L70,45 L65,20 Z M100,48 A15,15 0 1,1 100,78 A15,15 0 1,1 100,48 Z"/><circle cx="100" cy="58" r="4" fill="%238b5a2b"/><path d="M85,95 L115,95 L108,110 L92,110 Z" fill="%2394632e"/></svg>');
+            background-repeat: repeat;
+            background-size: 48px;
+            color: #2d2418;
+            line-height: 1.55;
+            min-height: 100vh;
+            opacity: 0;
+            animation: beanFade 0.7s ease forwards;
+        }
+
+        @keyframes beanFade {
+            from { opacity: 0; transform: translateY(8px);}
+            to { opacity: 1; transform: translateY(0);}
         }
 
         .container {
-            max-width: 1100px;
+            max-width: 1280px;
             margin: 0 auto;
+            padding: 24px 24px 56px;
+            position: relative;
         }
 
-        /* 主卡片 */
-        .card {
-            background: white;
-            border-radius: 32px;
-            box-shadow: 0 12px 30px rgba(0,0,0,0.08);
-            padding: 24px 28px;
-            margin-bottom: 28px;
+        .page-title {
+            text-align: center;
+            font-size: 3rem;
+            font-weight: 800;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            color: #3c2a1f;
+            text-shadow: 4px 4px 10px rgba(100, 55, 20, 0.12);
+            letter-spacing: 1px;
+            background: linear-gradient(135deg, #5a3e28, #9b6e42);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            margin-bottom: 12px;
+            display: inline-block;
+            width: 100%;
+        }
+        .page-title::before,
+        .page-title::after {
+            content: "☕";
+            font-size: 2.2rem;
+            opacity: 0.5;
+            display: inline-block;
+            margin: 0 16px;
+            color: #aa7848;
+            background: none;
+            -webkit-background-clip: unset;
+            background-clip: unset;
+        }
+        .page-title::after {
+            content: "🫘";
+        }
+        .subhead {
+            text-align: center;
+            font-size: 0.95rem;
+            color: #7f613e;
+            border-top: 1px solid #e5cfb3;
+            border-bottom: 1px solid #e5cfb3;
+            display: inline-block;
+            width: auto;
+            margin: 0 auto 38px;
+            padding: 8px 32px;
+            letter-spacing: 2px;
+            background: #fff7efaa;
+            backdrop-filter: blur(2px);
+            border-radius: 60px;
+        }
+
+        .activity-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 32px;
+            margin-bottom: 60px;
+        }
+
+        .activity-card {
+            background: #fffaf3;
+            background-image: radial-gradient(circle at 10% 30%, rgba(200, 150, 80, 0.05) 2%, transparent 2.5%);
+            background-size: 22px 22px;
+            border-radius: 48px 32px 48px 32px;
+            box-shadow: 0 18px 30px -12px rgba(60, 40, 20, 0.2), inset 0 1px 0 rgba(255,245,225,0.8);
+            padding: 28px 24px 32px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #ecd9bc;
+            min-height: 520px;
+        }
+
+        .activity-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 35px -14px #7a5a3a66;
+            border-color: #c99f6e;
+            background: #fffcf5;
+        }
+
+        .activity-name {
+            font-size: 1.9rem;
+            font-weight: 700;
+            font-family: 'Georgia', serif;
+            color: #6a3e1c;
+            text-align: center;
+            letter-spacing: -0.2px;
+            border-bottom: 2px dotted #e0c8a8;
+            display: inline-block;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            width: 100%;
+        }
+
+        .activity-image {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            border-radius: 36px;
+            margin-bottom: 20px;
+            background: #e8dccc;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
             transition: all 0.2s;
         }
 
-        h1 {
-            font-size: 1.8rem;
-            margin: 0 0 0.25rem 0;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            flex-wrap: wrap;
+        .activity-desc {
+            font-size: 0.94rem;
+            color: #4c3a28;
+            line-height: 1.5;
+            background: #fdf3e4;
+            padding: 14px 18px;
+            border-radius: 28px;
+            margin: 12px 0 24px;
+            border-left: 5px solid #bc8f5a;
+            flex-grow: 1;
         }
 
-        .sub {
-            color: #475569;
-            border-left: 4px solid #3b82f6;
-            padding-left: 14px;
-            margin: 8px 0 20px 0;
-            font-size: 0.9rem;
+        .detail-link {
+            display: inline-block;
+            background: #b46f3a;
+            color: #fff3e6;
+            text-align: center;
+            padding: 12px 0;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: 0.2s;
+            width: 100%;
+            text-decoration: none;
+            box-shadow: 0 2px 6px #ad7a4b40;
+            font-family: monospace;
+            letter-spacing: 1px;
+        }
+        .detail-link:hover {
+            background: #8d552c;
+            letter-spacing: 2px;
         }
 
-        .section-title {
+        .activity-details {
+            background: #fff7ef;
+            border-radius: 56px 40px 56px 40px;
+            box-shadow: 0 20px 35px -10px rgba(70, 40, 20, 0.25);
+            padding: 36px 32px 48px;
+            margin-top: 30px;
+            margin-bottom: 30px;
+            border: 1px solid #eedbbc;
+            backdrop-filter: blur(0px);
+            transition: all 0.2s;
+        }
+
+        .detail-title {
+            font-size: 2rem;
             font-weight: 700;
-            font-size: 1.25rem;
-            margin: 24px 0 12px 0;
-            padding-bottom: 6px;
-            border-bottom: 2px solid #e2e8f0;
+            font-family: 'Georgia', serif;
+            color: #5f3f25;
+            border-left: 8px solid #bc8756;
+            padding-left: 24px;
+            margin-bottom: 32px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23bc8756" width="18px" height="18px"><path d="M12,2C6.48,2,2,6.48,2,12s4.48,10,10,10s10-4.48,10-10S17.52,2,12,2z M12,6c1.1,0,2,0.9,2,2s-0.9,2-2,2 s-2-0.9-2-2S10.9,6,12,6z M12,18c-2.7,0-5.8-1.29-6-4h12C17.8,16.71,14.7,18,12,18z"/></svg>') no-repeat left 0.8rem;
+            background-size: 28px;
+        }
+
+        .historical-grid {
+            display: grid;
+            gap: 28px;
+            width: 100%;
+        }
+
+        /* 精确布局：3个史料 → 3列1行，4个史料 → 2x2 */
+        .historical-grid.count-3 {
+            grid-template-columns: repeat(3, 1fr);
+        }
+        .historical-grid.count-4 {
+            grid-template-columns: repeat(2, 1fr);
+        }
+        .historical-grid.count-1 {
+            grid-template-columns: 1fr;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        .historical-grid.count-2 {
+            grid-template-columns: repeat(2, 1fr);
+        }
+        /* 5个以上使用响应式2-3列 */
+        .historical-grid.count-5,
+        .historical-grid.count-6 {
+            grid-template-columns: repeat(2, 1fr);
+        }
+        .historical-grid.count-7,
+        .historical-grid.count-8,
+        .historical-grid.count-9 {
+            grid-template-columns: repeat(3, 1fr);
+        }
+        .historical-grid.count-more {
+            grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+        }
+
+        .historical-item {
+            background: #fffcf7;
+            border-radius: 32px;
+            padding: 22px 22px 26px;
+            border: 1px solid #ebddcd;
+            box-shadow: 0 8px 18px rgba(80, 50, 25, 0.05);
+            transition: all 0.2s;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        .historical-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 18px 28px -8px rgba(110, 70, 30, 0.2);
+            border-color: #dbb282;
+        }
+
+        .historical-header {
             display: flex;
             align-items: center;
             gap: 12px;
+            margin-bottom: 18px;
             flex-wrap: wrap;
-            justify-content: space-between;
+        }
+        .historical-number {
+            background: #b87a45;
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff0e0;
+            font-weight: bold;
+            font-size: 1.1rem;
+            box-shadow: inset 0 -1px 0 #9b5e31, 0 3px 6px rgba(0,0,0,0.1);
+        }
+        .historical-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #54371f;
+            font-family: Georgia, serif;
         }
 
-        .badge {
-            background: #eef2ff;
-            color: #1e40af;
-            border-radius: 40px;
+        .historical-meta {
+            background: #f9efdf;
+            padding: 12px 18px;
+            border-radius: 24px;
+            margin-bottom: 18px;
+            font-size: 0.9rem;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .meta-line {
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .meta-label {
+            font-weight: 700;
+            color: #9b6639;
+            min-width: 50px;
+        }
+        .meta-value {
+            color: #3c2a1b;
+            font-weight: 500;
+        }
+
+        .historical-analysis {
+            font-size: 0.93rem;
+            line-height: 1.55;
+            color: #4e3922;
+            margin: 10px 0 18px;
+            flex-grow: 1;
+        }
+
+        .historical-image {
+            width: 100%;
+            max-height: 200px;
+            object-fit: contain;
+            background: #f3e9db;
+            border-radius: 28px;
+            margin: 10px 0 6px;
+            padding: 10px;
+        }
+        .error-message {
+            background: #ffefe2;
+            border-left: 8px solid #c0813f;
+            padding: 20px 24px;
+            border-radius: 32px;
+            color: #754c24;
+            font-weight: 500;
+        }
+        .stats-badge {
+            display: inline-block;
+            background: #e6d5bd;
+            border-radius: 30px;
             padding: 4px 12px;
             font-size: 0.75rem;
-            font-weight: 500;
+            margin-left: 12px;
+            color: #694d2e;
+            vertical-align: middle;
         }
-
-        /* 单选/多选组 */
-        .options-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            margin: 12px 0 8px;
-            background: #f8fafc;
-            padding: 16px 20px;
-            border-radius: 28px;
+        @media (max-width: 1000px) {
+            .historical-grid.count-3,
+            .historical-grid.count-4,
+            .historical-grid.count-5,
+            .historical-grid.count-6 {
+                grid-template-columns: 1fr !important;
+            }
+            .page-title { font-size: 2rem; }
+            .page-title::before, .page-title::after { font-size: 1.6rem; margin: 0 6px; }
         }
-
-        .radio-option, .checkbox-option {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background: white;
-            padding: 8px 20px;
-            border-radius: 40px;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-            border: 1px solid #e2e8f0;
-            transition: 0.1s;
-            cursor: pointer;
+        @media (max-width: 640px) {
+            .activity-card { padding: 20px; }
+            .detail-title { font-size: 1.6rem; }
         }
-
-        .radio-option:hover, .checkbox-option:hover {
-            background: #f1f5f9;
-            border-color: #94a3b8;
-        }
-
-        input[type="radio"], input[type="checkbox"] {
-            width: 18px;
-            height: 18px;
-            margin: 0;
-            accent-color: #3b82f6;
-            cursor: pointer;
-        }
-
-        /* 可信度星星 */
-        .star-rating {
-            display: flex;
-            gap: 12px;
-            align-items: center;
-            flex-wrap: wrap;
-            background: #fefce8;
-            padding: 12px 20px;
-            border-radius: 60px;
-        }
-        .star {
-            font-size: 2rem;
-            cursor: pointer;
-            color: #cbd5e1;
-            transition: 0.1s;
-            user-select: none;
-        }
-        .star.selected {
-            color: #facc15;
-            text-shadow: 0 0 2px #eab308;
-        }
-        .star:hover {
-            transform: scale(1.1);
-        }
-        .rating-label {
-            font-weight: 500;
-            margin-left: 8px;
-            background: white;
-            padding: 4px 14px;
-            border-radius: 40px;
-            font-size: 0.85rem;
-        }
-
-        /* 关键词表格区域 */
-        .materials-table {
-            width: 100%;
-            border-collapse: collapse;
-            background: #ffffff;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-        }
-        .materials-table th {
-            background: #f1f5f9;
-            padding: 12px 10px;
-            font-weight: 600;
-            font-size: 0.85rem;
-            text-align: left;
-            border-bottom: 1px solid #e2e8f0;
-        }
-        .materials-table td {
-            padding: 12px 10px;
-            border-bottom: 1px solid #f0f2f5;
-            vertical-align: top;
-        }
-        .keyword-input, .relation-input {
-            width: 100%;
-            border: 1px solid #e2e8f0;
-            border-radius: 20px;
-            padding: 8px 12px;
-            font-size: 0.85rem;
-            background: #fff;
-            transition: 0.15s;
-        }
-        .keyword-input:focus, .relation-input:focus {
-            outline: none;
-            border-color: #3b82f6;
-            box-shadow: 0 0 0 2px rgba(59,130,246,0.2);
-        }
-        .material-type {
+        .coffee-badge {
+            font-family: monospace;
             font-size: 0.7rem;
-            background: #e6f0ff;
+            background: #e6d5bd;
             display: inline-block;
-            padding: 2px 8px;
             border-radius: 30px;
-            color: #075985;
+            padding: 4px 10px;
+            margin-top: 6px;
+            color: #694d2e;
         }
-
-        /* 生成按钮 */
-        .generate-btn {
-            background: #3b82f6;
-            border: none;
-            width: 100%;
-            padding: 14px 0;
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: white;
-            border-radius: 60px;
-            cursor: pointer;
-            margin: 20px 0 12px;
-            transition: 0.15s;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-        }
-        .generate-btn:hover {
-            background: #2563eb;
-            transform: scale(0.98);
-        }
-
-        /* 论文预览区域 */
-        .paper-preview {
-            background: #fef9e3;
-            border-left: 6px solid #eab308;
-            padding: 20px 24px;
-            border-radius: 28px;
-            margin-top: 16px;
-            white-space: pre-wrap;
-            font-family: 'Georgia', 'Times New Roman', serif;
-            line-height: 1.55;
-            font-size: 0.95rem;
-        }
-        .paper-title {
-            font-weight: 800;
-            font-size: 1.2rem;
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .reset-tip {
-            font-size: 0.7rem;
-            text-align: right;
-            color: #5b6e8c;
-            margin-top: 8px;
-        }
-        footer {
-            text-align: center;
-            font-size: 0.7rem;
-            color: #5b6e8c;
-            margin-top: 20px;
-        }
-        @media (max-width: 680px) {
-            .card { padding: 18px; }
-            .options-grid { gap: 12px; }
-            .materials-table th, .materials-table td { display: table-cell; }
-        }
-        button:active { transform: scale(0.97); }
     </style>
 </head>
 <body>
 <div class="container">
-    <div class="card">
-        <h1>📝 历史小论文 · 自助生成器</h1>
-        <div class="sub">🔍 基于上海初中历史最后一道小论文题型：观点单选 | 论据多选 | 史料多选 | 星级可信度 | 关键词+联系自填 → 自动生成200字小论文</div>
+    <div id="home-page">
+        <h1 class="page-title">白马咖啡店的前世今生</h1>
+        <div style="text-align: center; margin-bottom: 6px;"><span class="subhead">☕ 从东印度群岛到十里洋场 · 咖啡贸易史诗 🫘</span></div>
 
-        <!-- 1. 观点 (单选) -->
-        <div class="section-title">
-            <span>1️⃣ 你的观点</span>
-            <span class="badge">单选</span>
-        </div>
-        <div class="options-grid" id="opinionGroup">
-            <label class="radio-option">
-                <input type="radio" name="stance" value="正方：经济全球化利大于弊"> 🟢 正方：经济全球化利大于弊
-            </label>
-            <label class="radio-option">
-                <input type="radio" name="stance" value="反方：经济全球化弊大于利"> 🔴 反方：经济全球化弊大于利
-            </label>
-        </div>
-
-        <!-- 2. 论据（多选）基于六则不同史料提炼的内容 -->
-        <div class="section-title">
-            <span>2️⃣ 你的论据 (多选，史料原文要点)</span>
-            <span class="badge">多选 · 可直接选自史料内容</span>
-        </div>
-        <div class="options-grid" id="evidenceGroup">
-            <label class="checkbox-option"><input type="checkbox" value="A. 文献·世界银行报告：1990-2024年全球极端贫困率从36%降至8.5%，约20亿人脱贫。"> A. 文献·世界银行:贫困率36%→8.5%，20亿脱贫</label>
-            <label class="checkbox-option"><input type="checkbox" value="B. 实物·深圳博物馆来料加工设备及出口样品，见证中国参与全球分工。"> B. 实物·深圳博物馆:来料加工设备/出口样品</label>
-            <label class="checkbox-option"><input type="checkbox" value="C. 口述·义乌商人回忆：90年代接到外国订单，全家从草房搬进楼房。"> C. 口述·义乌商人:外国订单改善生活</label>
-            <label class="checkbox-option"><input type="checkbox" value="D. 图像·1995年WTO成立大会现场照片，全球贸易规则建立。"> D. 图像·WTO成立照片(1995):贸易规则制度化</label>
-            <label class="checkbox-option"><input type="checkbox" value="E. 文献·IMF研究：贸易开放度每提高10%，发展中国家GDP增长约1.5%。"> E. 文献·IMF:贸易开放+10% → GDP+1.5%</label>
-            <label class="checkbox-option"><input type="checkbox" value="F. 口述/图像·纪录片《全球化之路》越南农民工:进厂学技术，孩子上大学。"> F. 口述/图像·越南农民工:技术脱贫，子女教育提升</label>
+        <div class="activity-grid">
+            <div class="activity-card" data-role="dutch">
+                <div class="activity-name">🇳🇱 荷兰商人</div>
+                <img data-src="act1/kb1.jpg" data-fallback="act1/kb1.png" alt="荷兰商人 · 咖啡帆船" class="activity-image loading">
+                <div class="activity-desc" data-txt="act1/kb1.txt">📜 17世纪阿姆斯特丹商会，咖啡成为黑金……</div>
+                <span class="detail-link">📖 进入史料库 →</span>
+            </div>
+            <div class="activity-card" data-role="java">
+                <div class="activity-name">🌾 爪哇农民</div>
+                <img data-src="act2/kb2.jpg" data-fallback="act2/kb2.png" alt="爪哇农民 · 咖啡种植" class="activity-image loading">
+                <div class="activity-desc" data-txt="act2/kb2.txt">🌿 火山土壤与殖民种植制度，汗水浇灌咖农记忆……</div>
+                <span class="detail-link">📖 进入史料库 →</span>
+            </div>
+            <div class="activity-card" data-role="comprador">
+                <div class="activity-name">🎩 上海买办</div>
+                <img data-src="act3/kb3.jpg" data-fallback="act3/kb3.png" alt="上海买办·洋行咖啡贸易" class="activity-image loading">
+                <div class="activity-desc" data-txt="act3/kb3.txt">🏮 外滩洋行与茶栈，咖啡豆如何登陆老上海……</div>
+                <span class="detail-link">📖 进入史料库 →</span>
+            </div>
         </div>
 
-        <!-- 3. 史料来源（多选）同一组史料选项 -->
-        <div class="section-title">
-            <span>3️⃣ 史料来源</span>
-            <span class="badge">多选 · 文献/实物/口述/图像</span>
+        <div class="activity-details" id="activity-details" style="display: none;">
+            <h2 class="detail-title" id="detail-title">📜 史料库 · 咖啡岁月</h2>
+            <div id="historical-container"></div>
         </div>
-        <div class="options-grid" id="sourceGroup">
-            <label class="checkbox-option"><input type="checkbox" value="A. 世界银行《全球经济发展报告(2024)》文献史料"> A. 世界银行报告(文献)</label>
-            <label class="checkbox-option"><input type="checkbox" value="B. 深圳博物馆“改革开放”实物展厅藏品"> B. 深圳博物馆实物(来料加工设备/产品)</label>
-            <label class="checkbox-option"><input type="checkbox" value="C. 《义乌口述史：从鸡毛换糖到全球超市》口述史料"> C. 义乌口述史料集</label>
-            <label class="checkbox-option"><input type="checkbox" value="D. 法新社新闻照片档案(1995年WTO成立大会)图像史料"> D. 法新社WTO成立照片(图像)</label>
-            <label class="checkbox-option"><input type="checkbox" value="E. 国际货币基金组织《世界经济展望(2025)》文献史料"> E. IMF《世界经济展望》(文献)</label>
-            <label class="checkbox-option"><input type="checkbox" value="F. BBC纪录片《全球化之路》(2023)口述+影像综合史料"> F. BBC纪录片(口述+影像)</label>
-        </div>
-
-        <!-- 4. 可信程度 (星星评分) -->
-        <div class="section-title">
-            <span>4️⃣ 可信程度 (点击星星自选)</span>
-            <span class="badge">五颗星 · 按需打分</span>
-        </div>
-        <div class="star-rating" id="starRatingWidget">
-            <span class="star" data-value="1">☆</span>
-            <span class="star" data-value="2">☆</span>
-            <span class="star" data-value="3">☆</span>
-            <span class="star" data-value="4">☆</span>
-            <span class="star" data-value="5">☆</span>
-            <span class="rating-label" id="starFeedback">点击星星选择可信度</span>
-        </div>
-
-        <!-- 5. 史料关键信息 + 与观点的联系 (六个材料) -->
-        <div class="section-title">
-            <span>5️⃣ 史料关键信息 & 与观点的联系</span>
-            <span class="badge">学生自主填写 · 联动论文</span>
-        </div>
-        <table class="materials-table" id="keywordsTable">
-            <thead>
-                <tr><th style="width:15%">史料材料</th><th style="width:35%">关键词 (学生填写)</th><th style="width:50%">与观点的联系 (学生填写)</th></tr>
-            </thead>
-            <tbody>
-                <tr><td><span class="material-type">📄 材料A</span><br>文献·世界银行</td><td><input class="keyword-input" id="keyA" placeholder="例: 贫困率下降、脱贫20亿"></td><td><input class="relation-input" id="relA" placeholder="例: 证明全球化促进减贫，利大于弊"></td></tr>
-                <tr><td><span class="material-type">🏺 材料B</span><br>实物·深圳博物馆</td><td><input class="keyword-input" id="keyB" placeholder="例: 来料加工、出口产品"></td><td><input class="relation-input" id="relB" placeholder="例: 中国通过全球化融入世界分工"></td></tr>
-                <tr><td><span class="material-type">🎙️ 材料C</span><br>口述·义乌商人</td><td><input class="keyword-input" id="keyC" placeholder="例: 外国订单、住房改善"></td><td><input class="relation-input" id="relC" placeholder="例: 普通人从全球化中直接受益"></td></tr>
-                <tr><td><span class="material-type">🖼️ 材料D</span><br>图像·WTO成立</td><td><input class="keyword-input" id="keyD" placeholder="例: 全球贸易规则、多边合作"></td><td><input class="relation-input" id="relD" placeholder="例: 全球化推动制度性合作促进发展"></td></tr>
-                <tr><td><span class="material-type">📊 材料E</span><br>文献·IMF研究</td><td><input class="keyword-input" id="keyE" placeholder="例: 贸易开放+10% GDP+1.5%"></td><td><input class="relation-input" id="relE" placeholder="例: 量化证明全球化促进经济增长"></td></tr>
-                <tr><td><span class="material-type">🎬 材料F</span><br>口述/影像·越南农民工</td><td><input class="keyword-input" id="keyF" placeholder="例: 技能学习、子女上大学"></td><td><input class="relation-input" id="relF" placeholder="例: 全球化改变个人命运与阶层流动"></td></tr>
-            </tbody>
-        </table>
-
-        <button class="generate-btn" id="generatePaperBtn">✨ 根据以上选项自动生成小论文 ✨</button>
-
-        <!-- 6. 生成论文区域 -->
-        <div class="section-title">
-            <span>📄 6. 系统自动生成论文</span>
-            <span class="badge">200字左右 · 历史小论文</span>
-        </div>
-        <div id="paperOutput" class="paper-preview">
-            💡 请完成上方①~⑤选项/填写，点击「生成论文」按钮，系统将自动整合生成符合上海初中历史小论文题型的200字左右的论述。
-        </div>
-        <div class="reset-tip">⭐ 提示：观点/论据/来源为多选单选，可信度星星可任意，关键词与联系越详细论文越精准。</div>
     </div>
-    <footer>历史小论文自助生成器 | 模拟史料: 文献·实物·口述·图像交叉印证 | 基于辩题“经济全球化利大于弊/弊大于利”</footer>
 </div>
 
 <script>
-    // 星星交互逻辑
-    const stars = document.querySelectorAll('#starRatingWidget .star');
-    let currentRating = 0;   // 0-5
-    const starFeedback = document.getElementById('starFeedback');
-
-    function updateStars(rating) {
-        stars.forEach((star, idx) => {
-            const value = parseInt(star.getAttribute('data-value'));
-            if (value <= rating) {
-                star.innerHTML = '★';
-                star.classList.add('selected');
-            } else {
-                star.innerHTML = '☆';
-                star.classList.remove('selected');
-            }
-        });
-        if (rating === 0) starFeedback.innerText = '未评分，点击星星选择可信度';
-        else if (rating === 1) starFeedback.innerText = '★☆☆☆☆ 可信度较低';
-        else if (rating === 2) starFeedback.innerText = '★★☆☆☆ 部分参考';
-        else if (rating === 3) starFeedback.innerText = '★★★☆☆ 中等可信';
-        else if (rating === 4) starFeedback.innerText = '★★★★☆ 很可信，交叉印证';
-        else starFeedback.innerText = '★★★★★ 非常可信，多类型史料互证';
-    }
-
-    stars.forEach(star => {
-        star.addEventListener('click', (e) => {
-            const val = parseInt(star.getAttribute('data-value'));
-            currentRating = val;
-            updateStars(currentRating);
-        });
-    });
-    updateStars(0);
-
-    // 获取选中观点（单选）
-    function getSelectedOpinion() {
-        const radios = document.querySelectorAll('input[name="stance"]');
-        for (let radio of radios) {
-            if (radio.checked) return radio.value;
-        }
-        return null; // 未选
-    }
-
-    // 获取选中的论据（多选）返回文本数组
-    function getSelectedEvidences() {
-        const checkboxes = document.querySelectorAll('#evidenceGroup input[type="checkbox"]');
-        let selected = [];
-        checkboxes.forEach(cb => {
-            if (cb.checked) selected.push(cb.value);
-        });
-        return selected;
-    }
-
-    // 获取选中的史料来源
-    function getSelectedSources() {
-        const sourceBoxes = document.querySelectorAll('#sourceGroup input[type="checkbox"]');
-        let sources = [];
-        sourceBoxes.forEach(cb => {
-            if (cb.checked) sources.push(cb.value);
-        });
-        return sources;
-    }
-
-    // 获取材料关键词+联系 (材料A~F)
-    function getMaterialKeywordsAndLinks() {
-        const materials = [
-            { key: document.getElementById('keyA').value.trim(), relation: document.getElementById('relA').value.trim(), label: '材料A' },
-            { key: document.getElementById('keyB').value.trim(), relation: document.getElementById('relB').value.trim(), label: '材料B' },
-            { key: document.getElementById('keyC').value.trim(), relation: document.getElementById('relC').value.trim(), label: '材料C' },
-            { key: document.getElementById('keyD').value.trim(), relation: document.getElementById('relD').value.trim(), label: '材料D' },
-            { key: document.getElementById('keyE').value.trim(), relation: document.getElementById('relE').value.trim(), label: '材料E' },
-            { key: document.getElementById('keyF').value.trim(), relation: document.getElementById('relF').value.trim(), label: '材料F' }
-        ];
-        return materials;
-    }
-
-    // 核心：生成200字左右小论文
-    function generateEssay() {
-        // 获取观点
-        let opinion = getSelectedOpinion();
-        if (!opinion) {
-            alert('请先选择你的观点（正方/反方）');
-            return;
-        }
-
-        const evidences = getSelectedEvidences();
-        const sources = getSelectedSources();
-        const materialsData = getMaterialKeywordsAndLinks();
-
-        // 至少一个论据，至少一个来源（不强求，但建议）
-        if (evidences.length === 0) {
-            if (!confirm('您尚未选择任何论据，生成的论文内容可能单薄。是否继续？')) return;
-        }
-
-        // 开始组织论文正文 (200字左右)
-        let stanceText = (opinion.includes('利大于弊')) ? '利大于弊' : '弊大于利';
-        let thesisTitle = `经济全球化${stanceText}`;
+    (function() {
+        let currentActivityId = 0;
         
-        // 第一段: 亮明观点
-        let essay = `题目：经济全球化${stanceText}\n\n`;
-        
-        // 根据观点写出立场句
-        if (opinion.includes('利大于弊')) {
-            essay += `经济全球化虽然伴随挑战，但从整体看，其积极影响远大于消极影响，因此利大于弊。`;
-        } else {
-            essay += `经济全球化在带来发展机遇的同时，也加剧了贫富差距与文化冲突，因此弊大于利。`;
+        // 清洗元数据重复前缀（如 类型：类型：专著 → 专著）
+        function cleanMetaPrefix(raw) {
+            if (!raw) return '——';
+            let cleaned = raw.trim();
+            cleaned = cleaned.replace(/类型：类型：/g, '类型：');
+            cleaned = cleaned.replace(/作者：作者：/g, '作者：');
+            cleaned = cleaned.replace(/时间：时间：/g, '时间：');
+            cleaned = cleaned.replace(/内容分析：内容分析：/g, '内容分析：');
+            if (cleaned.startsWith('类型：')) cleaned = cleaned.slice(3);
+            if (cleaned.startsWith('作者：')) cleaned = cleaned.slice(3);
+            if (cleaned.startsWith('时间：')) cleaned = cleaned.slice(3);
+            if (cleaned.startsWith('内容分析：')) cleaned = cleaned.slice(5);
+            cleaned = cleaned.replace(/名称\d+：/g, '');
+            return cleaned.trim();
         }
-        
-        // 第二段: 利用论据进行论证 (从选中的论据中挑选3-5个融合)
-        if (evidences.length > 0) {
-            essay += ` 以下史料和论据可以支撑这一观点。`;
-            // 取前4个论据增强描述
-            let usedEvidences = evidences.slice(0, 4);
-            let evidenceSentence = usedEvidences.map(ev => {
-                // 精简展示关键内容
-                let short = ev.length > 70 ? ev.substring(0, 65) + '…' : ev;
-                return short;
-            }).join('；');
-            if(evidenceSentence) essay += ` 例如：${evidenceSentence}。`;
-        } else {
-            essay += ` 从不同史料中可以看到全球化的多重影响。`;
-        }
-        
-        // 结合史料来源类型强调可信度 (多类型混合)
-        if (sources.length > 0) {
-            let hasLit = sources.some(s => s.includes('文献'));
-            let hasObj = sources.some(s => s.includes('实物'));
-            let hasOral = sources.some(s => s.includes('口述'));
-            let hasImg = sources.some(s => s.includes('图像') || s.includes('照片'));
-            let typeArr = [];
-            if(hasLit) typeArr.push('文献史料');
-            if(hasObj) typeArr.push('实物史料');
-            if(hasOral) typeArr.push('口述史料');
-            if(hasImg) typeArr.push('图像史料');
-            if(typeArr.length > 0) {
-                essay += ` 以上史料涵盖${typeArr.join('、')}，属于不同类型史料相互印证，增强了论证的可信度。`;
-            }
-        }
-        
-        // 结合学生填写的“关键词+与观点的联系”，选取非空部分融入论文
-        let validLinks = materialsData.filter(item => item.key !== '' || item.relation !== '');
-        if (validLinks.length > 0) {
-            essay += ` 从关键信息看：`;
-            let linkParts = [];
-            for (let i = 0; i < Math.min(validLinks.length, 3); i++) {
-                let item = validLinks[i];
-                if (item.key && item.relation) {
-                    linkParts.push(`${item.label}中“${item.key}”说明${item.relation}`);
-                } else if (item.key && !item.relation) {
-                    linkParts.push(`${item.label}关键词“${item.key}”支撑全球化影响`);
-                } else if (!item.key && item.relation) {
-                    linkParts.push(`${item.label}与观点联系：${item.relation}`);
+
+        // 解析单个 sl.txt 档案
+        function parseArchiveTxt(content, idx) {
+            const lines = content.split(/\r?\n/);
+            let record = {
+                number: idx,
+                name: '',
+                type: '',
+                author: '',
+                time: '',
+                analysis: ''
+            };
+            for (let line of lines) {
+                line = line.trim();
+                if (!line) continue;
+                if (line.match(/^名称(\d+)?：/)) {
+                    let rawVal = line.replace(/^名称\d*：/, '');
+                    record.name = cleanMetaPrefix(rawVal);
+                }
+                else if (line.match(/^类型(\d+)?：/)) {
+                    let rawVal = line.replace(/^类型\d*：/, '');
+                    record.type = cleanMetaPrefix(rawVal);
+                }
+                else if (line.match(/^作者(\d+)?：/)) {
+                    let rawVal = line.replace(/^作者\d*：/, '');
+                    record.author = cleanMetaPrefix(rawVal);
+                }
+                else if (line.match(/^时间(\d+)?：/)) {
+                    let rawVal = line.replace(/^时间\d*：/, '');
+                    record.time = cleanMetaPrefix(rawVal);
+                }
+                else if (line.match(/^内容分析(\d+)?：/)) {
+                    let rawVal = line.replace(/^内容分析\d*：/, '');
+                    record.analysis = cleanMetaPrefix(rawVal);
+                }
+                else if (!line.match(/^(名称|类型|作者|时间|内容分析)/) && record.analysis === '') {
+                    if (record.analysis.length < 400) record.analysis += line + ' ';
                 }
             }
-            if (linkParts.length) essay += linkParts.join('；') + '。';
-        } else {
-            // 若学生没填，给出基础结合
-            essay += ` 例如中国通过实物史料见证参与分工，WTO图像史料建立贸易规则，共同展现全球化推动合作与减贫。`;
+            if (!record.name) record.name = `史料${idx}`;
+            if (!record.type) record.type = '档案遗存';
+            if (!record.author) record.author = '佚名';
+            if (!record.time) record.time = '未详';
+            if (!record.analysis) record.analysis = '（原档内容待考）';
+            return record;
+        }
+
+        /**
+         * 精确检测指定活动的实际史料数量（只检测存在的文件）
+         * 通过连续 HEAD 请求 sl1.txt, sl2.txt... 直到第一个失败
+         * 返回实际存在的文件个数
+         * 例如 act1/Archives 下有 sl1,sl2,sl3,sl4 → 返回 4
+         */
+        async function detectActualArchiveCount(activityId) {
+            let count = 0;
+            const maxAttempt = 50; // 安全上限
+            for (let i = 1; i <= maxAttempt; i++) {
+                const url = `act${activityId}/Archives/sl${i}.txt`;
+                try {
+                    const response = await fetch(url, { method: 'HEAD' });
+                    if (response.ok) {
+                        count++;
+                    } else {
+                        // 遇到404或其他错误状态，停止检测（后面文件不存在）
+                        break;
+                    }
+                } catch (e) {
+                    // 网络错误也停止
+                    break;
+                }
+            }
+            return count;
+        }
+
+        /**
+         * 获取指定活动的所有史料（仅加载实际存在的文件，数量由 detectActualArchiveCount 决定）
+         * 有多少个txt文件就返回多少个史料对象，一个不多一个不少
+         */
+        async function fetchArchivesByActualCount(activityId) {
+            // 先精确检测实际存在的txt文件数量
+            const actualCount = await detectActualArchiveCount(activityId);
+            
+            if (actualCount === 0) {
+                return []; // 没有任何史料文件
+            }
+            
+            // 只加载实际存在的文件（1 到 actualCount），不会尝试加载不存在的文件
+            const tasks = [];
+            for (let i = 1; i <= actualCount; i++) {
+                const url = `act${activityId}/Archives/sl${i}.txt`;
+                tasks.push(
+                    fetch(url)
+                        .then(res => {
+                            if (!res.ok) throw new Error(`missing sl${i}`);
+                            return res.text();
+                        })
+                        .then(txt => parseArchiveTxt(txt, i))
+                        .catch(() => null)
+                );
+            }
+            const results = await Promise.all(tasks);
+            // 过滤掉失败项（理论上应该全部成功，因为实际数量已检测）
+            const validResults = results.filter(item => item !== null);
+            return validResults;
+        }
+
+        /**
+         * 渲染史料网格 - 只渲染实际存在的史料卡片
+         * @param {Array} historicals - 史料对象数组，长度等于实际txt文件个数
+         * @param {number} activityId - 活动ID
+         */
+        function renderHistoricalGrid(historicals, activityId) {
+            const container = document.getElementById('historical-container');
+            if (!container) return;
+            container.innerHTML = '';
+            
+            if (!historicals.length) {
+                container.innerHTML = `<div class="error-message">☕ 暂未读取到史料库档案，请确认 act${activityId}/Archives/ 下存在 sl1.txt, sl2.txt 等文件。</div>`;
+                return;
+            }
+
+            const count = historicals.length;
+            const grid = document.createElement('div');
+            let gridClass = 'historical-grid';
+            
+            // 根据实际数量精准选择布局：3个→3列，4个→2x2，其他数量自适应
+            if (count === 3) gridClass += ' count-3';
+            else if (count === 4) gridClass += ' count-4';
+            else if (count === 1) gridClass += ' count-1';
+            else if (count === 2) gridClass += ' count-2';
+            else if (count === 5 || count === 6) gridClass += ' count-6';
+            else if (count >= 7 && count <= 9) gridClass += ' count-9';
+            else gridClass += ' count-more';
+            grid.className = gridClass;
+
+            // 遍历实际史料数据，为每个txt文件创建一张卡片
+            historicals.forEach(hist => {
+                const card = document.createElement('div');
+                card.className = 'historical-item';
+                const imgJpg = `act${activityId}/Archives/sl${hist.number}.jpg`;
+                const imgPng = `act${activityId}/Archives/sl${hist.number}.png`;
+                card.innerHTML = `
+                    <div class="historical-header">
+                        <span class="historical-number">${hist.number}</span>
+                        <div class="historical-name">${escapeHtml(hist.name)}</div>
+                    </div>
+                    <div class="historical-meta">
+                        <div class="meta-line"><span class="meta-label">📖 类型</span><span class="meta-value">${escapeHtml(hist.type)}</span></div>
+                        <div class="meta-line"><span class="meta-label">✒️ 作者</span><span class="meta-value">${escapeHtml(hist.author)}</span></div>
+                        <div class="meta-line"><span class="meta-label">⏳ 时间</span><span class="meta-value">${escapeHtml(hist.time)}</span></div>
+                    </div>
+                    <img data-src="${imgJpg}" data-fallback="${imgPng}" alt="${escapeHtml(hist.name)}" class="historical-image loading">
+                    <div class="historical-analysis">🫘 ${escapeHtml(hist.analysis)}</div>
+                `;
+                grid.appendChild(card);
+            });
+            container.appendChild(grid);
+            initArchiveImagesLazy();
+        }
+
+        // 史料图片懒加载
+        function initArchiveImagesLazy() {
+            const images = document.querySelectorAll('#historical-container img.historical-image');
+            if (!images.length) return;
+            const observer = new IntersectionObserver((entries, obs) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const img = entry.target;
+                        const src = img.dataset.src;
+                        const fallback = img.dataset.fallback;
+                        if (!src) return;
+                        const temp = new Image();
+                        temp.onload = () => { img.src = src; img.classList.add('loaded'); img.classList.remove('loading'); };
+                        temp.onerror = () => {
+                            if (fallback) {
+                                const fallImg = new Image();
+                                fallImg.onload = () => { img.src = fallback; img.classList.add('loaded'); img.classList.remove('loading'); };
+                                fallImg.onerror = () => { img.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><rect fill="%23f3e6d5" width="200" height="200"/><text x="100" y="110" text-anchor="middle" fill="%23945f36" font-size="18">☕ 咖啡印记</text></svg>'; img.classList.remove('loading'); };
+                                fallImg.src = fallback;
+                            } else {
+                                img.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><rect fill="%23f3e6d5" width="200" height="200"/><text x="100" y="110" text-anchor="middle" fill="%23945f36">🫘 古影</text></svg>';
+                                img.classList.remove('loading');
+                            }
+                        };
+                        temp.src = src;
+                        observer.unobserve(img);
+                    }
+                });
+            }, { threshold: 0.2, rootMargin: "80px" });
+            images.forEach(img => observer.observe(img));
+        }
+
+        // 核心：切换详情展示（单击卡片: 如果已显示同一角色则隐藏，否则展示实际存在的史料卡片）
+        async function toggleDetail(activityId, roleDisplayName) {
+            const detailsDiv = document.getElementById('activity-details');
+            const titleEl = document.getElementById('detail-title');
+            const containerHist = document.getElementById('historical-container');
+            
+            // 情况1：详情可见且是同一个角色 → 隐藏
+            if (detailsDiv.style.display === 'block' && currentActivityId === activityId) {
+                detailsDiv.style.display = 'none';
+                return;
+            }
+            
+            // 情况2：显示新角色的史料库（只展示实际存在的史料卡片）
+            currentActivityId = activityId;
+            
+            // 显示加载状态
+            containerHist.innerHTML = `<div style="text-align:center; padding:48px;">⏳ 正在检测史料档案数量... <span style="font-size:1.2rem;">🫘☕</span></div>`;
+            detailsDiv.style.display = 'block';
+            
+            try {
+                // 检测实际存在的文件数量
+                const actualCount = await detectActualArchiveCount(activityId);
+                const countSuffix = actualCount > 0 ? `<span class="stats-badge">📄 ${actualCount} 件史料</span>` : '<span class="stats-badge">📄 0 件史料</span>';
+                titleEl.innerHTML = `📚 史料库 · ${roleDisplayName} ${countSuffix}<span class="coffee-badge">咖啡记忆卷宗</span>`;
+                
+                // 只加载实际存在的史料文件，有多少txt就返回多少个史料对象
+                const archives = await fetchArchivesByActualCount(activityId);
+                
+                if (!archives.length) {
+                    containerHist.innerHTML = `<div class="error-message">⚠️ 当前角色「${roleDisplayName}」未找到任何史料档案。请确保 act${activityId}/Archives/sl*.txt 存在。</div>`;
+                } else {
+                    // 渲染史料卡片：数量 = actualCount，一个不多一个不少
+                    renderHistoricalGrid(archives, activityId);
+                }
+                detailsDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            } catch (err) {
+                console.error(err);
+                let msg = `加载失败：${err.message || '请检查网络或文件路径'}`;
+                if (window.location.protocol === 'file:') msg = '⚠️ 当前使用 file:// 协议，请使用 HTTP 服务器（python -m http.server）访问以加载完整史料库。';
+                containerHist.innerHTML = `<div class="error-message">❌ ${msg}</div>`;
+                titleEl.innerHTML = `📚 史料库 · ${roleDisplayName} <span class="coffee-badge">加载出错</span>`;
+            }
         }
         
-        // 可信度星级展示
-        let starDisplay = '';
-        if (currentRating > 0) {
-            let starFull = '★'.repeat(currentRating);
-            let starEmpty = '☆'.repeat(5 - currentRating);
-            starDisplay = `${starFull}${starEmpty}`;
-            essay += ` 综合多类史料，可信程度评定为${starDisplay}（${currentRating}星）。`;
-        } else {
-            essay += ` 综合各项证据，可信度较高。`;
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/[&<>]/g, function(m) {
+                if (m === '&') return '&amp;';
+                if (m === '<') return '&lt;';
+                if (m === '>') return '&gt;';
+                return m;
+            });
+        }
+
+        // 初始化首页：图片懒加载、文本加载 + 单击卡片交互
+        function initHomeCardsAndToggle() {
+            const homeImgs = document.querySelectorAll('.activity-card img.activity-image');
+            const imgObserver = new IntersectionObserver((entries, obs) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const img = entry.target;
+                        const src = img.dataset.src;
+                        const fall = img.dataset.fallback;
+                        if (src) {
+                            const loader = new Image();
+                            loader.onload = () => { img.src = src; img.classList.add('loaded'); img.classList.remove('loading'); };
+                            loader.onerror = () => {
+                                if (fall) {
+                                    const fallImg = new Image();
+                                    fallImg.onload = () => { img.src = fall; img.classList.add('loaded'); img.classList.remove('loading'); };
+                                    fallImg.onerror = () => { img.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><rect fill="%23e5d5be" width="200" height="200"/><text x="100" y="110" text-anchor="middle" fill="%2375512e">☕ 老相片</text></svg>'; img.classList.remove('loading'); };
+                                    fallImg.src = fall;
+                                } else {
+                                    img.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><rect fill="%23e5d5be" width="200" height="200"/><text x="100" y="110" text-anchor="middle" fill="%2375512e">🫘 咖啡时光</text></svg>';
+                                    img.classList.remove('loading');
+                                }
+                            };
+                            loader.src = src;
+                        }
+                        obs.unobserve(img);
+                    }
+                });
+            }, { threshold: 0.2 });
+            homeImgs.forEach(img => imgObserver.observe(img));
+            
+            // 加载场景文本摘要
+            const descs = document.querySelectorAll('.activity-desc[data-txt]');
+            descs.forEach(el => {
+                const url = el.dataset.txt;
+                if (url) fetch(url).then(r => r.ok ? r.text() : Promise.reject()).then(txt => {
+                    el.textContent = txt.trim().substring(0, 160) + (txt.length > 160 ? '…' : '');
+                }).catch(() => { el.textContent = '📜 咖啡史料手稿待加载，请确认路径。'; });
+            });
+            
+            // 绑定卡片单击：单击展示详情（精确显示实际存在的史料数量，有多少个txt就展示多少张卡片）
+            const cards = document.querySelectorAll('.activity-card');
+            cards.forEach((card, idx) => {
+                let actId = 0;
+                let roleDisplay = '';
+                if (idx === 0) { actId = 1; roleDisplay = '荷兰商人 · 香料航线'; }
+                else if (idx === 1) { actId = 2; roleDisplay = '爪哇农民 · 殖民种植园'; }
+                else { actId = 3; roleDisplay = '上海买办 · 洋场咖啡市集'; }
+                
+                card.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    toggleDetail(actId, roleDisplay);
+                });
+            });
         }
         
-        // 结尾重申观点，收束全文，控制篇幅在200字上下
-        if (opinion.includes('利大于弊')) {
-            essay += ` 综上所述，全球化推动减贫、技术传播与和平发展，尽管存在分配不均，但整体利大于弊。各国应完善治理，使全球化成果更公平。`;
-        } else {
-            essay += ` 由此可见，全球化导致产业流失、文化冲击与主权弱化，弊大于利。应当适度调整全球化进程，维护本国利益。`;
+        // 本地协议提醒
+        if (window.location.protocol === 'file:') {
+            const warn = document.createElement('div');
+            warn.className = 'error-message';
+            warn.style.marginBottom = '20px';
+            warn.innerHTML = '🫘 提示：当前为本地文件模式，建议使用 `python -m http.server` 运行以便完整加载咖啡史料图片及文本。';
+            document.querySelector('.activity-grid')?.insertAdjacentElement('beforebegin', warn);
         }
         
-        // 字数大致控制（中文字符计数）
-        let cleanEssay = essay.replace(/题目：.*?\n\n/, '');
-        let chineseCount = (cleanEssay.match(/[\u4e00-\u9fa5]/g) || []).length;
-        if (chineseCount < 150) {
-            // 略微丰富论点
-            if(evidences.length >=2) essay += ` 实际数据证明，参与全球化的国家普遍获得更快的经济增长与人类发展指数提升。`;
-            else essay += ` 从不同视角的史料来看，全球化的影响已深入普通民众生活。`;
-        }
-        if (chineseCount > 280) {
-            // 如果太长就裁剪最后一句（保留结尾符号）
-            if(essay.length > 550) essay = essay.substring(0, 530) + "。";
-        }
+        // ESC 快捷隐藏
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                const details = document.getElementById('activity-details');
+                if (details && details.style.display === 'block') {
+                    details.style.display = 'none';
+                }
+            }
+        });
         
-        // 最终将论文显示，保留换行
-        const outputDiv = document.getElementById('paperOutput');
-        outputDiv.innerHTML = `<div class="paper-title">📜 自动生成的小论文</div>${essay.replace(/\n/g, '<br>')}<div style="margin-top:10px; font-size:0.7rem; text-align:right; border-top:1px solid #ffe6b3; padding-top:6px;">✅ 基于您选择的观点/论据/史料及关键词自动生成</div>`;
-    }
-    
-    // 绑定生成按钮事件
-    const genBtn = document.getElementById('generatePaperBtn');
-    genBtn.addEventListener('click', generateEssay);
-    
-    // 可选默认观点勾选 (使界面友好)
-    const defaultRadio = document.querySelector('input[name="stance"][value="正方：经济全球化利大于弊"]');
-    if (defaultRadio) defaultRadio.checked = true;
-    
-    // 附: 为了让演示直观，预填部分关键词示例（便于学生参考，可清空但提供示范）
-    if(document.getElementById('keyA').value === '') document.getElementById('keyA').placeholder = '例: 贫困率降至8.5%';
-    if(document.getElementById('relA').value === '') document.getElementById('relA').placeholder = '例: 全球化使数亿人脱贫';
-    if(document.getElementById('keyB').value === '') document.getElementById('keyB').placeholder = '来料加工、外向型经济';
-    if(document.getElementById('relB').value === '') document.getElementById('relB').placeholder = '中国融入全球分工的证据';
-    if(document.getElementById('keyC').value === '') document.getElementById('keyC').placeholder = '外商订单、住房改善';
-    if(document.getElementById('relC').value === '') document.getElementById('relC').placeholder = '基层民众获益';
-    if(document.getElementById('keyD').value === '') document.getElementById('keyD').placeholder = 'WTO成立、多边规则';
-    if(document.getElementById('relD').value === '') document.getElementById('relD').placeholder = '贸易制度化推动全球化';
-    if(document.getElementById('keyE').value === '') document.getElementById('keyE').placeholder = '贸易开放度+10% GDP+1.5%';
-    if(document.getElementById('relE').value === '') document.getElementById('relE').placeholder = '量化经济增长利好';
-    if(document.getElementById('keyF').value === '') document.getElementById('keyF').placeholder = '跨国工厂、教育提升';
-    if(document.getElementById('relF').value === '') document.getElementById('relF').placeholder = '全球化改变个人命运';
+        document.addEventListener('DOMContentLoaded', () => {
+            initHomeCardsAndToggle();
+        });
+    })();
 </script>
 </body>
 </html>
